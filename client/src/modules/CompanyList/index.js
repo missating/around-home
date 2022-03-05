@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
+import { Row, Col } from 'components/Grid';
+import Box from 'components/Box';
+
 import { getCompanyList } from 'data/companyList';
 
 import CompanyCard from 'modules/CompanyCard';
@@ -13,14 +16,18 @@ const CompanyList = () => {
     });
   }, []);
 
-
-  console.log(companyList)
-
   return (
-    <div>
-      text
-      <CompanyCard />
-    </div>
+    <Row>
+      {companyList.map((company) => (
+        <Col sm={12} md={6} xl={4} key={company.id}>
+          <Box mb="md">
+            <CompanyCard
+              {...company}
+            />
+          </Box>
+        </Col>
+      ))}
+    </Row>
   )
 };
 
