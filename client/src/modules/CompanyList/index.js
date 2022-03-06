@@ -1,20 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Row, Col } from 'components/Grid';
 import Box from 'components/Box';
-
-import { getCompanyList } from 'data/companyList';
 
 import CompanyCard from 'modules/CompanyCard';
 
 const CompanyList = () => {
   const [companyList, setCompanyList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getCompanyList().then(companies => {
-      setCompanyList(companies)
-    });
+    fetch('http://localhost:3000/companies')
+      .then(response => response.json())
+      .then(data => {
+        setCompanyList(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   }, []);
+
+  if (loading) {
+    return null;
+  };
 
   return (
     <Row>
@@ -22,7 +31,9 @@ const CompanyList = () => {
         <Col sm={12} md={6} xl={4} key={company.id}>
           <Box mb="md">
             <CompanyCard
-              {...company}
+              id={company.id}
+              name={company.name}
+              timeSlots={company.time_slots}
             />
           </Box>
         </Col>

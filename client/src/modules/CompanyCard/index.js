@@ -1,23 +1,26 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
+import PropTypes from 'prop-types';
 
 import Box from 'components/Box';
 import Text from 'components/Text';
 import Flex from "components/Flex";
 
+import ReservedTimeSlots from 'modules/ReservedTimeSlots';
+import TimeSlots from 'modules/TimeSlots';
+
 import { formatDate } from "utils/formatDate";
 
-import TimeSlots from 'modules/TimeSlots';
-import ReservedTimeSlots from 'modules/ReservedTimeSlots'
+const CompanyCard = ({ id, name, timeSlots }) => {
+  const [selectedTime, setSelectedTime] = useState({});
 
-const CompanyCard = ({ id, name, time_slots }) => {
-  const groups = useMemo(() => time_slots.reduce((a, b) => {
+  const groups = useMemo(() => timeSlots.reduce((a, b) => {
     const item = b.start_time.split('T')[0];
     if (!a[item]) {
       a[item] = [];
     }
     a[item].push(b);
     return a;
-  }, {}), [time_slots])
+  }, {}), [timeSlots]);
 
   const groupedByDate = useMemo(() => Object.keys(groups).map((date) => {
     return {
@@ -26,7 +29,13 @@ const CompanyCard = ({ id, name, time_slots }) => {
     };
   }), [groups]);
 
-  console.log(groupedByDate)
+  const handleClick = (item) => 
+    selectedTime[name]?.start_time === item.start_time 
+    && selectedTime[name]?.end_time === item.end_time 
+    ? setSelectedTime({}) 
+    : setSelectedTime({
+      [name]: item
+    });
 
   return (
     <>
@@ -42,7 +51,7 @@ const CompanyCard = ({ id, name, time_slots }) => {
             {name}
           </Text>
       </Box>
-      <ReservedTimeSlots />
+      <ReservedTimeSlots name={name} selectedTime={selectedTime} />
       <Flex 
         height="400px" 
         alignItems="center" 
@@ -58,12 +67,22 @@ const CompanyCard = ({ id, name, time_slots }) => {
                 key={`${id}${index}`}
                 timeSlots={slots.timeSlots}
                 day={slots.day}
+                id={id}
+                handleClick={handleClick}
+                name={name} 
+                selectedTime={selectedTime} 
               />
             ))
           }
       </Flex>
     </>
   );
+};
+
+CompanyCard.proTypes = {
+  id: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  timeSlots: PropTypes.array.isRequired,
 };
 
 export default CompanyCard;
