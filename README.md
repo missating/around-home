@@ -15,11 +15,11 @@
 
 1. Clone repository by running `git clone https://github.com/missating/around-home.git`
 2. `cd` into the root of the **project directory**
-3. `cd` into the **server** folder
-4. Make sure you have `json-server` installed globally `npm install -g json-server`
-3. Run `json-server --watch db.json` on the terminal to start the server
-4. then, in a different terminal `cd` into the **client** folder
-5. Run `npm install` to install all dependencies and `npm start` to start the application
+3. Install `json-server` globally by running `npm install -g json-server`
+4. `cd` into the **server** folder
+5. Run `json-server --watch db.json` on the terminal to start the server
+6. then, in a different terminal `cd` into the **client** folder
+7. Run `npm install` to install all dependencies and `npm start` to start the application
 
 ## Testing:
 
@@ -27,6 +27,6 @@
 
 Unit testing is achieved through the use of `jest` framework with `React Testing Library`.
 
-while within the **project root directory**.
+while within the **client folder**.
 
 1. **Unit tests** - Run `npm test` on the terminal
